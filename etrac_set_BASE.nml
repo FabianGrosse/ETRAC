@@ -3,7 +3,7 @@
 runID         = 'RUNID_TMP'
 isWarmStart   = ISWARM_TMP
 continueWrite = CONTINUE_TMP
-tbnt_set_dir  = 'TEMPPATH_TMPtbnt_setup/'
+tbnt_set_dir  = 'TEMPPATH_TMPetrac_setup/'
 bulk_nc_dir   = 'BULKPATH_TMP'
 bulk_nc_file  = 'BULKFILE_TMP'
 init_nc_dir   = 'INITPATH_TMP'
