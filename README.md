@@ -1,9 +1,12 @@
 # ETRAC
 Element TRACing software for numerical models
 
+
+
 Introduction
 
 The ETRAC software is a software that allows for the tracing of elements from individual sources through all physical and biogeochemical processes represented by the physical-biogeochemical model, to which it is applied. The software was initially developed for the ECOHAM North Sea model (Große et al., 2017; doi: 10.3389/fmars.2017.00383), however, with the intention to make it applicable also to other models. It requires specific model output, which needs to be implemented to the model to be used if it is not implemented already. For ROMS, this output has been implemented based on ROMS 3.7. Detailed information on the theory and implementation of the element tracing, and the model output requirements can be found in the documentation.
+
 
 
 Documentation
@@ -17,6 +20,7 @@ The ETRAC software is written in Fortran and requires Fortran 2000 compatibility
 The source code and the scripts to compile the software can be found in /software.
 
 
+
 Running ETRAC
 
 To run ETRAC just modify the files the following files according to your setup (see comments in files):
@@ -25,6 +29,7 @@ To run ETRAC just modify the files the following files according to your setup (
  - etrac_set_BASE.nml
 
 Then run: nohup ./run_ETRAC_CHAIN.sh
+
 
 
 Tools for preparation of ETRAC setup files
