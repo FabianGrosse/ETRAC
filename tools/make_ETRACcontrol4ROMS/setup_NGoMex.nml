@@ -1,0 +1,83 @@
+! define ETRAC setup
+&etrac_setup_nml
+domain        = 'NGoMex'                                                                       ! user-defined domain name
+gridFile      = '/misc/1/input/grosse/ROMS_forcing/roms854/mch_grd.nc'                         ! grid file location
+gridID        = 'NGoMex_MCH'                                                                   ! user-defined name of grid setup
+hisFile       = '/misc/7/output/grosse/roms854-NGoMEX-MCH_CEDAR/his_mch_bio_tbnt_0001.nc'      ! HIS file location
+n_xi_var      = 'xi_rho'                                                                       ! name of Xi index variable
+n_eta_var     = 'eta_rho'                                                                      ! name of Eta index variable
+hcrit         = 5.0                                                                            ! critical layer thickness 
+n_boundary    = 1                                                                              ! number of additional rho points at each outer boundary
+closedNB      = .true.                                                                         ! closed northern boundary?
+closedSB      = .false.                                                                        ! closed southern boundary?
+closedWB      = .false.                                                                        ! closed western boundary?
+closedEB      = .false.                                                                        ! closed eastern boundary?
+includeAtmos  = .false.                                                                        ! include atmospheric N deposition?
+riverFile     = '/misc/1/input/grosse/ROMS_forcing/roms854/mch_river_1982_2016_Rdet_prov.nc'   ! river file location
+riverID       = 'Mississippi_Atchafalaya'                                                      ! user-defined name of river setup
+river_xi_off  = 0                                                                              ! offset of river location in Xi direction (i.e., number of Xi indices been removed during cutting of regions
+river_eta_off = 0                                                                              ! offset of river location in Eta direction (i.e., number of Eta indices been removed during cutting of regions
+nRivers       = 2                                                                              ! number of rivers in domain: if > 0: number of river masks to be read
+                                                                                               !                             if < 0: number of rivers (with only one location per river)
+boxID         = 'NGoMex_4+8boxes'                                                              ! box setup identifier
+boxInfoType   = 'depth_lon'                                                                    ! type of box information
+boxSepDepth   = 30                                                                             ! box separation depth
+boxMaxXi      = 92                                                                             ! box maximum Xi index (regions with higher Xi index are excluded from boxes)
+boxMaxEta     = 1000                                                                           ! box maximum Eta index (regions with higher Eta index are excluded from boxes)
+/
+
+! river setup when using river masks (multiple locations per river)
+&river_mask_nml
+riverName = 'ATCHAFALAYA'
+riverMask = 'river_Atch'
+/
+&river_mask_nml
+riverName = 'MISSISSIPPI'
+riverMask = 'river_Miss'
+/
+
+!! river setup when using single-location rivers
+!&river_list_nml
+!riverName = 'Changjiang'
+!riverIndex = 1
+!/
+!&river_list_nml
+!riverName = 'Yellow river'
+!riverIndex = 2
+!/
+!&river_list_nml
+!riverName = 'Minjiang'
+!riverIndex = 3
+!/
+!&river_list_nml
+!riverName = 'Huaihe'
+!riverIndex = 4
+!/
+!&river_list_nml
+!riverName = 'Qiantangjiang'
+!riverIndex = 5
+!/
+!&river_list_nml
+!riverName = 'Yalujiang'
+!riverIndex = 6
+!/
+!&river_list_nml
+!riverName = 'Haihe'
+!riverIndex = 7
+!/
+!&river_list_nml
+!riverName = 'Liaohe'
+!riverIndex = 8
+!/
+!&river_list_nml
+!riverName = 'Luanhe'
+!riverIndex = 9
+!/
+!&river_list_nml
+!riverName = 'Hanjiang'
+!riverIndex = 10
+!/
+!&river_list_nml
+!riverName = 'Oujiang'
+!riverIndex = 11
+!/

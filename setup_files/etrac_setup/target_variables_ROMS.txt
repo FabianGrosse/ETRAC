@@ -1,0 +1,60 @@
+!+==================================================================================================
+!+==================================== LIST OF TARGET VARIABLES ====================================
+!+==================================================================================================
+!+
+!+ - THE LIST BELOW MUST CONTAIN ONE COMPLETE SET OF INFORMATION PER TARGET VARIABLE
+!+
+!+ - A TARGET VARIABLE IS DEFINED BY ITS FULL NAME, ABBREVIATION, NUMBER OF VARIABLES ASSOCIATED
+!+   WITH, THE NAME OF THESE VARIABLES, AND THE STARTING AND ENDING DAY OF THE PERIOD OF ANALYSIS
+!+
+!+ - THE FIRST LINE OF THE LIST CONTAINS THE NUMBER OF TARGET VARIABLES
+!+
+!+ - THE FIRST LINE OF EACH SET CONTAINS THE FULL NAME OF THE TARGET VARIABLE
+!+
+!+ - THE SECOND LINE EACH SET CONTAINS THE TARGET VARIABLE ABBREVIATION
+!+
+!+ - THE THIRD LINE EACH SET CONTAINS THE NUMBER *N* OF MODEL STATE VARIABLES ASSOCIATED WITH THE
+!+   TARGET VARIABLE
+!+
+!+ - THE FOLLOWING *N* LINES CONTAIN THE DIFFERENT MODEL VARIABLE NAMES (*ONE* PER LINE)
+!+
+!+ - THE SECOND LAST LINE OF EACH SET CONTAINS THE STARTING DAY OF THE PERIOD OF ANALYSIS
+!+
+!+ - THE LAST LINE OF EACH SET CONTAINS THE ENDING DAY OF THE PERIOD OF ANALYSIS
+!+
+!+ - IF STARTING OR ENDING DAY EQUAL *ZERO*, THE WHOLE YEAR IS SELECTED
+!+
+!+ - THERE MUST BE NO SEPARATOR (e.g. blank line, comment etc.) BETWEEN THE DIFFERENT LISTS AND SETS
+!+
+!+ - THE 1st SET CONTAINS THE DIFFERENT INFORMATION ON THE 1st TARGET VARIABLE, THE 2nd SET CONTAINS
+!+   THE DIFFERENT INFORMATION ON THE 2nd TARGET VARIABLE ETC.
+!+
+!+==================================================================================================
+!+========================================== LIST START ============================================
+!+==================================================================================================
+3
+TOTAL NITROGEN
+TN
+7
+NO3
+NH4
+phytoplanktonN
+zooplanktonN
+SdetritusN
+LdetritusN
+RdetritusN
+0
+0
+PHYTOPLANKTON-N
+PHY-N
+1
+phytoplanktonN
+0
+0
+DISSOLVED INORGANIC NITROGEN
+DIN
+2
+NO3
+NH4
+0
+0

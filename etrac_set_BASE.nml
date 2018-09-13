@@ -1,0 +1,173 @@
+! BASIC ETRAC SET-UP
+&tbnt_run_nml
+runID         = 'RUNID_TMP'
+isWarmStart   = ISWARM_TMP
+continueWrite = CONTINUE_TMP
+tbnt_set_dir  = 'TEMPPATH_TMPtbnt_setup/'
+bulk_nc_dir   = 'BULKPATH_TMP'
+bulk_nc_file  = 'BULKFILE_TMP'
+init_nc_dir   = 'INITPATH_TMP'
+init_nc_file  = 'INITFILE_TMP'
+/
+
+! TIME SET-UP
+&time_setup_nml
+year        = YEAR_TMP
+timeStep    = DT_TMP
+startStep   = START_TMP
+endStep     = END_TMP
+offsetStep  = OFFSET_TMP
+subTimeStep = DT_SUB_TMP
+/
+
+! DEFINE NAMES OF AREA AND VOLUME VARIABLES TO BE READ FROM NC FILE
+&area_vol_nml
+areaVar = 'area'
+volVar  = 'volume'
+/
+
+! DEFINE INPUT FOR MODEL SETUP 
+&model_nml
+model_set_dir         = 'TEMPPATH_TMPmodel_setup/'                            ! directory with model setup files
+model_grid_file       = 'model_grid_NGoMex_MCH.txt'                           ! file containing the information about neighbouring, surface and bottom cells
+model_fluxes_file     = 'model_fluxes_ROMS.txt'                               ! file containing information about all model fluxes
+model_dummy_vars_file = 'model_dummy_vars_ROMS.txt'                           ! file containing information about all model dummy variables
+model_rivers_file     = 'model_rivers_NGoMex_MCH_Mississippi_Atchafalaya.txt' ! file containing information about all model rivers
+/
+
+! INDEX-RELATED INFORMATION (outside offset region mass conservation is not guaranteed)
+&indexing_nml
+dimName_x       = 'xi_rho'                      ! name of dimension in horizontal x-direction (cdo changes "xi_rho" to "x_3")
+dimName_y       = 'eta_rho'                     ! name of dimension in horizontal y-direction (cdo changes "eta_rho" to "y_2")
+dimName_z       = 's_rho'                       ! name of dimension in vertical direction
+gridName_x      = 'lon_rho'                     ! name of grid variable for horizontal x-direction
+gridName_y      = 'lat_rho'                     ! name of grid variable for horizontal y-direction
+gridName_z      = 's_rho'                       ! name of grid variable for vertical direction
+n_x             = 128                           ! number of indices in horizontal x-direction
+n_y             = 64                            ! number of indices in horizontal y-direction
+n_z             = 20                            ! number of indices in vertical direction
+offset_xStart   = 1                             ! starting offset in x-direction
+offset_xEnd     = 1                             ! ending offset in x-direction
+offset_yStart   = 1                             ! starting offset in y-direction
+offset_yEnd     = 1                             ! ending offset in y-direction
+model_idep_file = 'model_iDep_NGoMex_MCH.txt'   ! map file with maximum depth indices
+/
+
+! BASIC SOURCE SET-UP
+&fraction_numbers_nml                ! basic fraction setup
+nTracedElements =          1         ! number of elements to trace: 1 to 4 (see list below for options)
+nRiverFractions =          2         ! number of river fractions: 0 to "number of rivers in the domain"
+nOpenBFractions =          1         ! number of open boundary fractions
+nAtmosFractions =          0         ! number of atmospheric fractions
+initialFraction =          1         ! index of fraction (i.e., source) to which initial mass in the system is attributed
+                                     ! if ZERO -- if UNTRACED source exists: initial mass attributed to UNTRACED source
+                                     !         --                 otherwise: initial mass is attributed equally to all sources
+/
+
+! selection of elements
+&element_nml  tracedElement = 'N'  / ! Nitrogen (N)
+!&element_nml  tracedElement = 'C'  / ! Carbon (C)
+!&element_nml  tracedElement = 'P'  / ! Phosphorus(P)
+!&element_nml  tracedElement = 'X'  / ! Passive tracer
+!&element_nml  tracedElement = 'Si' / ! Silicon (Si)
+
+! DEFINE LINKED FLUXES
+&linked_fluxes_nml
+linkedFlxOutStep =     -1                    ! OUTPUT INTERVAL LINKED FLUXES (in days):
+                                             ! <0 --> no output
+                                             !  0 --> output written only at beginning and end of simulation (annually cumulated)
+                                             !  1 --> daily values (cumulated over day)
+                                             ! >1 --> values written at defined interval (cumulated over interval)
+linkedFlx_file   = 'linked_fluxes_ROMS.txt'  ! file with definition of linked fluxes
+/
+
+! RIVER GROUPS to be traced: group name, number of rivers in this group
+&river_groups_nml     tracedGroupName = 'Mississippi'       nTracedRivers =  43 / ! 1st group of rivers
+&river_groups_nml     tracedGroupName = 'Atchafalaya'       nTracedRivers =  12 / ! 2nd group of rivers
+
+! RIVERS: river name, group index (according to order of previous name lists "river_groups_nml")
+&river_fraction_nml     tracedRivName = 'Mississippi-01'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-02'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-03'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-04'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-05'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-06'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-07'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-08'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-09'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-10'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-11'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-12'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-13'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-14'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-15'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-16'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-17'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-18'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-19'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-20'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-21'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-22'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-23'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-24'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-25'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-26'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-27'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-28'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-29'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-30'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-31'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-32'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-33'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-34'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-35'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-36'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-37'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-38'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-39'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-40'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-41'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-42'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Mississippi-43'            rivGroupID = 1 /
+&river_fraction_nml     tracedRivName = 'Atchafalaya-01'            rivGroupID = 2 /
+&river_fraction_nml     tracedRivName = 'Atchafalaya-02'            rivGroupID = 2 /
+&river_fraction_nml     tracedRivName = 'Atchafalaya-03'            rivGroupID = 2 /
+&river_fraction_nml     tracedRivName = 'Atchafalaya-04'            rivGroupID = 2 /
+&river_fraction_nml     tracedRivName = 'Atchafalaya-05'            rivGroupID = 2 /
+&river_fraction_nml     tracedRivName = 'Atchafalaya-06'            rivGroupID = 2 /
+&river_fraction_nml     tracedRivName = 'Atchafalaya-07'            rivGroupID = 2 /
+&river_fraction_nml     tracedRivName = 'Atchafalaya-08'            rivGroupID = 2 /
+&river_fraction_nml     tracedRivName = 'Atchafalaya-09'            rivGroupID = 2 /
+&river_fraction_nml     tracedRivName = 'Atchafalaya-10'            rivGroupID = 2 /
+&river_fraction_nml     tracedRivName = 'Atchafalaya-11'            rivGroupID = 2 /
+&river_fraction_nml     tracedRivName = 'Atchafalaya-12'            rivGroupID = 2 /
+
+! OPEN BOUNDARY SOURCES: set name of input file
+&openb_fraction_nml     openb_file = 'etrac_openb_source_NGoMex_MCH_NGoMex_SINGLE.txt' / ! read open boundary sources indices
+
+! ATMOSPHERIC DEPOSITION SOURCES: set name input file
+&atmos_fraction_nml     atmos_file = 'etrac_atmos_source_NGoMex_MCH_NGoMex.txt' / ! read atmospheric source indices
+
+! BULK VARIABLE BUDGET/BALANCE
+&bulk_bud_nml     balVarName = 'LdetritusN'     iBal = 82     jBal = 21     kBal = 20 /
+
+! DEFINE OUTPUT
+&output_nml
+output_dir       = 'OUTPUTPATH_TMP'
+relFracOutStep   =         1              ! OUTPUT INTERVAL RELATIVE FRACTIONS (only variables):
+                                          ! <0 --> no output
+                                          !  0 --> output written only at beginning and end of simulation
+                                          !  1 --> data written at based on input data time step (status at end of each time step)
+                                          ! >1 --> values written at defined interval
+absFracOutStep   =         1              ! OUTPUT INTERVAL ABSOLUTE FRACTIONS (variables and fluxes):
+                                          ! <0 --> no output
+                                          !  0 --> output written only at beginning and end of simulation (0 means cumulation over whole year)
+                                          !  1 --> data written at based on input data time step (cumulated over each time step)
+                                          ! >1 --> values cumulated over defined interval
+targetOutput     =         0              ! SWITCH FOR TARGET AREA OUTPUT 
+                                          !  0 --> no output
+                                          !  1 --> create ascii output for the areas and variables defined in the 2 subsequently listed files
+                                          
+target_area_file = 'target_areas_NGoMex_MCH_NGoMex_4+8boxes.txt'     ! file with definition of target areas
+target_vars_file = 'target_variables_ROMS.txt'                       ! file with definition of target variables and associated periods
+/

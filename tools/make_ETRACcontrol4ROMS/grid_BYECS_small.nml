@@ -1,0 +1,14 @@
+&grid_nml
+domain      = 'BYECS_small'
+gridFile    = '/misc/1/input/grosse/ROMS_forcing/roms854/ECS/create-grid-remove-spone20t_small.nc'         ! grid file location
+n_xi_var    = 'x'                                                                                          ! name of Xi index variable
+n_eta_var   = 'y'                                                                                          ! name of Eta index variable
+n_sig_var   = 'lev'                                                                                        ! name of Sigma index variable
+n_boundary  = 1                                                                                            ! number of additional rho points at each outer boundary
+closedNB    = .false.                                                                                      ! closed northern boundary?
+closedSB    = .false.                                                                                      ! closed southern boundary?
+closedWB    = .false.                                                                                      ! closed western boundary?
+closedEB    = .false.                                                                                      ! closed eastern boundary?
+excludeFile = '/misc/1/input/grosse/ROMS_forcing/roms854/ECS/create-nudgecoef-paci-ys-30layers_small.nc'   ! file with variable used for masking of excluded cells
+excludeVar  = 'NO3_NudgeCoef'                                                                              ! variable used for masking of excluded cells
+/

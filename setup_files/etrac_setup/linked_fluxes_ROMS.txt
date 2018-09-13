@@ -1,0 +1,44 @@
+!+==================================================================================================
+!+===================================== LIST OF LINKED FLUXES ======================================
+!+==================================================================================================
+!+
+!+ - THE LIST BELOW MUST CONTAIN ALL FLUXES WHICH HAVE TO BE LINKED TO ANOTHER FLUX
+!+
+!+ - LINES STARTING WITH '!+' ARE NOT EVALUATED
+!+
+!+ - EACH LINE MUST CONTAIN ONE COMPLETE *LINKED FLUX*
+!+
+!+ - SEMICOLON ';' IS USED TO SEPARATE THE REQUIRED ENTRIES PER FLUX
+!+
+!+ - COMPLETE *LINKED FLUX* IS DEFINED BY:
+!+     1. the *FLUX NAME* as it is used in the data input file
+!+
+!+     2. the *FLUX TYPE* defined by a *NUMBER*; valid flux types are:
+!+         -  1 = prognostic pelagic flux (from 3D variable to 3D variable, inside a single grid cell)
+!+         -  2 = 2D atmospheric deposition (input from atmosphere)
+!+         -  3 = 3D atmospheric deposition (input from atmosphere)
+!+         -  4 = 2D flux between sediment and pelagial
+!+         -  5 = 3D flux between sediment and pelagial
+!+         -  6 = advective transport (from 3D variable to 3D variable, exchange between two cells) => EXCHANGE FLUX
+!+         -  7 = diffusive transport (from 3D variable to 3D variable, exchange between two cells) => EXCHANGE FLUX
+!+         -  8 = river discharge
+!+         -  9 = precipitation minus evaporation
+!+         - 10 = 2D air-sea exchange (gain/loss of 3D variable)
+!+         - 11 = 3D air-sea exchange (gain/loss of 3D variable)
+!+         - 12 = 2D diagnostic flux (i.e. flux on diagnostic variables, derived from prognostic flux)
+!+         - 13 = 3D diagnostic flux (i.e. flux on diagnostic variables, derived from prognostic flux)
+!+
+!+     3. the *LINKED VARIABLE NAME* as it is used in the data input file
+!+
+!+==================================================================================================
+!+========================================== LIST START ============================================
+!+==================================================================================================
+!+ FLUX NAME ; FLUX TYPE ; VAR NAME
+   f_o2o_sed ;     4     ;   sd_pon
+   f_p1c_o2o ;     1     ;      p1n
+   f_p2c_o2o ;     1     ;      p2n
+   f_o2o_z1c ;     1     ;      z1n
+   f_o2o_z2c ;     1     ;      z2n
+   f_o2o_bac ;     1     ;      ban
+   f_o2o_n4n ;     1     ;      n4n
+   f_o2o_brm ;     5     ;   sd_pon

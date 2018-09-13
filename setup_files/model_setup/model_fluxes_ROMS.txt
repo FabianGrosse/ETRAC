@@ -1,0 +1,165 @@
+!+=====================================================================================================================================================
+!+================================================== MODEL FLUXES AND RELATED VARIABLES ===============================================================
+!+=====================================================================================================================================================
+!+
+!+ - THE LIST BELOW MUST CONTAIN ALL FLUXES USED BY THE UNDERLYING MODEL
+!+
+!+ - LINES STARTING WITH '!+' ARE NOT EVALUATED
+!+
+!+ - EACH LINE MUST CONTAIN ONE COMPLETE FLUX
+!+
+!+ - SEMICOLON ';' IS USED TO SEPARATE THE REQUIRED ENTRIES PER FLUX
+!+
+!+ - THE LENGTH OF THE FLUX AND VARIABLE NAMES IS LIMITED TO *50* DIGITS (see parameter "nameLen" in tbnt_common.f90)
+!+
+!+ - THE LINE LENGTH IS LIMITED TO *250* DIGITS (see parameter "lineLen" in tbnt_common.f90)
+!+
+!+ - *A COMPLETE FLUX IS DEFINED BY*:
+!+     1. the *CURRENCY* (i.e. the element) of the flux; valid currencies are:
+!+         -  P = phosphorus
+!+         -  N = nitrogen
+!+         -  C = carbon
+!+         - Si = silicon
+!+
+!+     2. the *FLUX NAME* as it is used in the data input file
+!+
+!+     3. the *FLUX TYPE* defined by a *NUMBER*; valid flux types are:
+!+         -  1 = prognostic pelagic flux (from 3D variable to 3D variable, inside a single grid cell)
+!+         -  2 = 2D atmospheric deposition (input from atmosphere)
+!+         -  3 = 3D atmospheric deposition (input from atmosphere)
+!+         -  4 = 2D sediment flux
+!+         -  5 = 3D sediment flux
+!+         -  6 = advective transport (from 3D variable to 3D variable, exchange between two cells) => EXCHANGE FLUX
+!+         -  7 = diffusive transport (from 3D variable to 3D variable, exchange between two cells) => EXCHANGE FLUX
+!+         -  8 = river discharge
+!+         -  9 = precipitation minus evaporation
+!+         - 10 = 2D air-sea exchange (gain/loss of 3D variable)
+!+         - 11 = 3D air-sea exchange (gain/loss of 3D variable)
+!+         - 12 = 2D diagnostic flux (i.e. flux on diagnostic variables, derived from prognostic flux)
+!+         - 13 = 3D diagnostic flux (i.e. flux on diagnostic variables, derived from prognostic flux)
+!+
+!+     4. the *DIRECTIONAL COMPONENT* defined by a number, NON-ZERO for EXCHANGE FLUXES (or 3D derived exchange fluxes), else ZERO
+!+
+!+     5. the *INPUT VARIABLE NAME* as it is used in the data input file
+!+
+!+     6. the *INPUT VARIABLE TYPE* defined by a number; valid variable types are:
+!+         -  1 = 3D prognostic variable
+!+         -  2 = 2D prognostic variable
+!+         -  3 = 3D diagnostic variable (i.e. derived)
+!+         -  4 = 2D prognostic variable (i.e. derived)
+!+         -  5 = 3D dummy variable (i.e. variable not existent in output of applied model but open end of one or more fluxes; created internally during TBNT calculation)
+!+         -  6 = 2D dummy variable (i.e. variable not existent in output of applied model but open end of one or more fluxes; created internally during TBNT calculation)
+!+
+!+     7. the *OUTPUT VARIABLE NAME* as it is used in the data input file
+!+
+!+     8. the *OUTPUT VARIABLE TYPE* defined by a number; for valid variable types see INPUT VARIABLE TYPE above
+!+
+!+ - *OPTIONAL, ONLY NEEDED IN CASE THAT THE FLUX IS A DIAGNOSTIC FLUX* (i.e. flux type 16 or 17):
+!+     9. *AUXILIARY FLUX NAME* (i.e. the name of the flux used for the calculation of the flux)
+!+
+!+    10. *AUXILIARY FLUX TYPE* defined by a NUMBER; for valid flux types see FLUX TYPE above (16 and 17 not allowed)
+!+
+!+    11. *AUXILIARY FLUX FACTOR* (i.e. factor by which the auxiliary flux is multiplied; can also be written as
+!+                                      fraction or product or combination of both)
+!+
+!+    EXAMPLES           # OF INPUT PARAMETER:  1  ;      2      ;   3  ;  4  ;   5   ;  6  ;     7    ;  8  ;      9      ;  10  ;   11
+!+    - Example #1 - PROGNOSTIC PELAGIC FLUX :  P  ;  f_n1p_p1p  ;   1  ;  0  ;  n1p  ;  1  ;     p1p  ;  1
+!+    - Example #2 - DIAGNOSTIC SEDIMENT FLUX:  P  ;  f_bap_sed  ;  12  ;  0  ;  bap  ;  3  ;  sd_pop  ;  2  ;  f_bac_sed  ;   4  ;   0.02
+!+    - Example #3 - PROGNOSTIC EXCHANGE FLUX:  P  ;   f_tu_n1p  ;   6  ;  1  ;  n1p  ;  1  ;     n1p  ;  1
+!+    - Example #4 - DIAGNOSTIC EXCHANGE FLUX:  P  ;   f_tu_z1p  ;  13  ;  1  ;  z1p  ;  3  ;     z1p  ;  3  ;   f_tu_z1c  ;   6  ;  1/110
+!+
+!+=====================================================================================================================================================
+!+============================================================== LIST START ===========================================================================
+!+=====================================================================================================================================================
+!+ ELEMENT ;      FLUX NAME       ; FLUX TYPE ; COMPONENT ;   IN VAR NAME  ; IN VAR TYPE ;  OUT VAR NAME  ; OUT VAR TYPE ; AUX FLUX NAME ; AUX FLUX TYPE ; AUX FLUX FAC
+      N    ; NO3_to_PhyN          ;    1      ;     0     ; NO3            ;       1     ; phytoplanktonN ;       1
+      N    ; NH4_to_PhyN          ;    1      ;     0     ; NH4            ;       1     ; phytoplanktonN ;       1
+      N    ; NH4_to_NO3           ;    1      ;     0     ; NH4            ;       1     ; NO3            ;       1
+      N    ; PhyN_to_SDeN         ;    1      ;     0     ; phytoplanktonN ;       1     ; SdetritusN     ;       1
+      N    ; PhyN_to_LDeN         ;    1      ;     0     ; phytoplanktonN ;       1     ; LdetritusN     ;       1
+      N    ; PhyN_to_ZooN         ;    1      ;     0     ; phytoplanktonN ;       1     ; zooplanktonN   ;       1
+      N    ; ZooN_to_SDeN         ;    1      ;     0     ; zooplanktonN   ;       1     ; SdetritusN     ;       1
+      N    ; ZooN_to_NH4          ;    1      ;     0     ; zooplanktonN   ;       1     ; NH4            ;       1
+      N    ; SDeN_to_LDeN         ;    1      ;     0     ; SdetritusN     ;       1     ; LdetritusN     ;       1
+      N    ; SDeN_to_NH4          ;    1      ;     0     ; SdetritusN     ;       1     ; NH4            ;       1
+      N    ; LDeN_to_NH4          ;    1      ;     0     ; LdetritusN     ;       1     ; NH4            ;       1
+      N    ; RDeN_to_NH4          ;    1      ;     0     ; RdetritusN     ;       1     ; NH4            ;       1
+      N    ; sPhy_to_NH4          ;    4      ;     0     ; phytoplanktonN ;       1     ; NH4            ;       1
+      N    ; sSDe_to_NH4          ;    4      ;     0     ; SdetritusN     ;       1     ; NH4            ;       1
+      N    ; sLDe_to_NH4          ;    4      ;     0     ; LdetritusN     ;       1     ; NH4            ;       1
+      N    ; sPhy_to_N2           ;    4      ;     0     ; phytoplanktonN ;       1     ; N2             ;       6
+      N    ; sSDe_to_N2           ;    4      ;     0     ; SdetritusN     ;       1     ; N2             ;       6
+      N    ; sLDe_to_N2           ;    4      ;     0     ; LdetritusN     ;       1     ; N2             ;       6
+      N    ; snk_PhyN             ;    7      ;     3     ; phytoplanktonN ;       1     ; phytoplanktonN ;       1
+      N    ; snk_SDeN             ;    7      ;     3     ; SdetritusN     ;       1     ; SdetritusN     ;       1
+      N    ; snk_LDeN             ;    7      ;     3     ; LdetritusN     ;       1     ; LdetritusN     ;       1
+      N    ; NO3_hAdx             ;    6      ;     1     ; NO3            ;       1     ; NO3            ;       1
+      N    ; NO3_hAde             ;    6      ;     2     ; NO3            ;       1     ; NO3            ;       1
+      N    ; NO3_vAds             ;    6      ;     3     ; NO3            ;       1     ; NO3            ;       1
+      N    ; NO3_hDix             ;    7      ;     1     ; NO3            ;       1     ; NO3            ;       1
+      N    ; NO3_hDie             ;    7      ;     2     ; NO3            ;       1     ; NO3            ;       1
+      N    ; NO3_hDis             ;    7      ;     3     ; NO3            ;       1     ; NO3            ;       1
+      N    ; NO3_vDis             ;    7      ;     3     ; NO3            ;       1     ; NO3            ;       1
+      N    ; NO3_psrcx            ;    8      ;     0     ; NO3            ;       1     ; NO3            ;       1
+      N    ; NO3_psrce            ;    8      ;     0     ; NO3            ;       1     ; NO3            ;       1
+      N    ; NO3_psrcs            ;    8      ;     0     ; NO3            ;       1     ; NO3            ;       1
+      N    ; NH4_hAdx             ;    6      ;     1     ; NH4            ;       1     ; NH4            ;       1
+      N    ; NH4_hAde             ;    6      ;     2     ; NH4            ;       1     ; NH4            ;       1
+      N    ; NH4_vAds             ;    6      ;     3     ; NH4            ;       1     ; NH4            ;       1
+      N    ; NH4_hDix             ;    7      ;     1     ; NH4            ;       1     ; NH4            ;       1
+      N    ; NH4_hDie             ;    7      ;     2     ; NH4            ;       1     ; NH4            ;       1
+      N    ; NH4_hDis             ;    7      ;     3     ; NH4            ;       1     ; NH4            ;       1
+      N    ; NH4_vDis             ;    7      ;     3     ; NH4            ;       1     ; NH4            ;       1
+      N    ; NH4_psrcx            ;    8      ;     0     ; NH4            ;       1     ; NH4            ;       1
+      N    ; NH4_psrce            ;    8      ;     0     ; NH4            ;       1     ; NH4            ;       1
+      N    ; NH4_psrcs            ;    8      ;     0     ; NH4            ;       1     ; NH4            ;       1
+      N    ; phytoplanktonN_hAdx  ;    6      ;     1     ; phytoplanktonN ;       1     ; phytoplanktonN ;       1
+      N    ; phytoplanktonN_hAde  ;    6      ;     2     ; phytoplanktonN ;       1     ; phytoplanktonN ;       1
+      N    ; phytoplanktonN_vAds  ;    6      ;     3     ; phytoplanktonN ;       1     ; phytoplanktonN ;       1
+      N    ; phytoplanktonN_hDix  ;    7      ;     1     ; phytoplanktonN ;       1     ; phytoplanktonN ;       1
+      N    ; phytoplanktonN_hDie  ;    7      ;     2     ; phytoplanktonN ;       1     ; phytoplanktonN ;       1
+      N    ; phytoplanktonN_hDis  ;    7      ;     3     ; phytoplanktonN ;       1     ; phytoplanktonN ;       1
+      N    ; phytoplanktonN_vDis  ;    7      ;     3     ; phytoplanktonN ;       1     ; phytoplanktonN ;       1
+      N    ; phytoplanktonN_psrcx ;    8      ;     0     ; phytoplanktonN ;       1     ; phytoplanktonN ;       1
+      N    ; phytoplanktonN_psrce ;    8      ;     0     ; phytoplanktonN ;       1     ; phytoplanktonN ;       1
+      N    ; phytoplanktonN_psrcs ;    8      ;     0     ; phytoplanktonN ;       1     ; phytoplanktonN ;       1
+      N    ; zooplanktonN_hAdx    ;    6      ;     1     ; zooplanktonN   ;       1     ; zooplanktonN   ;       1
+      N    ; zooplanktonN_hAde    ;    6      ;     2     ; zooplanktonN   ;       1     ; zooplanktonN   ;       1
+      N    ; zooplanktonN_vAds    ;    6      ;     3     ; zooplanktonN   ;       1     ; zooplanktonN   ;       1
+      N    ; zooplanktonN_hDix    ;    7      ;     1     ; zooplanktonN   ;       1     ; zooplanktonN   ;       1
+      N    ; zooplanktonN_hDie    ;    7      ;     2     ; zooplanktonN   ;       1     ; zooplanktonN   ;       1
+      N    ; zooplanktonN_hDis    ;    7      ;     3     ; zooplanktonN   ;       1     ; zooplanktonN   ;       1
+      N    ; zooplanktonN_vDis    ;    7      ;     3     ; zooplanktonN   ;       1     ; zooplanktonN   ;       1
+      N    ; zooplanktonN_psrcx   ;    8      ;     0     ; zooplanktonN   ;       1     ; zooplanktonN   ;       1
+      N    ; zooplanktonN_psrce   ;    8      ;     0     ; zooplanktonN   ;       1     ; zooplanktonN   ;       1
+      N    ; zooplanktonN_psrcs   ;    8      ;     0     ; zooplanktonN   ;       1     ; zooplanktonN   ;       1
+      N    ; SdetritusN_hAdx      ;    6      ;     1     ; SdetritusN     ;       1     ; SdetritusN     ;       1
+      N    ; SdetritusN_hAde      ;    6      ;     2     ; SdetritusN     ;       1     ; SdetritusN     ;       1
+      N    ; SdetritusN_vAds      ;    6      ;     3     ; SdetritusN     ;       1     ; SdetritusN     ;       1
+      N    ; SdetritusN_hDix      ;    7      ;     1     ; SdetritusN     ;       1     ; SdetritusN     ;       1
+      N    ; SdetritusN_hDie      ;    7      ;     2     ; SdetritusN     ;       1     ; SdetritusN     ;       1
+      N    ; SdetritusN_hDis      ;    7      ;     3     ; SdetritusN     ;       1     ; SdetritusN     ;       1
+      N    ; SdetritusN_vDis      ;    7      ;     3     ; SdetritusN     ;       1     ; SdetritusN     ;       1
+      N    ; SdetritusN_psrcx     ;    8      ;     0     ; SdetritusN     ;       1     ; SdetritusN     ;       1
+      N    ; SdetritusN_psrce     ;    8      ;     0     ; SdetritusN     ;       1     ; SdetritusN     ;       1
+      N    ; SdetritusN_psrcs     ;    8      ;     0     ; SdetritusN     ;       1     ; SdetritusN     ;       1
+      N    ; LdetritusN_hAdx      ;    6      ;     1     ; LdetritusN     ;       1     ; LdetritusN     ;       1
+      N    ; LdetritusN_hAde      ;    6      ;     2     ; LdetritusN     ;       1     ; LdetritusN     ;       1
+      N    ; LdetritusN_vAds      ;    6      ;     3     ; LdetritusN     ;       1     ; LdetritusN     ;       1
+      N    ; LdetritusN_hDix      ;    7      ;     1     ; LdetritusN     ;       1     ; LdetritusN     ;       1
+      N    ; LdetritusN_hDie      ;    7      ;     2     ; LdetritusN     ;       1     ; LdetritusN     ;       1
+      N    ; LdetritusN_hDis      ;    7      ;     3     ; LdetritusN     ;       1     ; LdetritusN     ;       1
+      N    ; LdetritusN_vDis      ;    7      ;     3     ; LdetritusN     ;       1     ; LdetritusN     ;       1
+      N    ; LdetritusN_psrcx     ;    8      ;     0     ; LdetritusN     ;       1     ; LdetritusN     ;       1
+      N    ; LdetritusN_psrce     ;    8      ;     0     ; LdetritusN     ;       1     ; LdetritusN     ;       1
+      N    ; LdetritusN_psrcs     ;    8      ;     0     ; LdetritusN     ;       1     ; LdetritusN     ;       1
+      N    ; RdetritusN_hAdx      ;    6      ;     1     ; RdetritusN     ;       1     ; RdetritusN     ;       1
+      N    ; RdetritusN_hAde      ;    6      ;     2     ; RdetritusN     ;       1     ; RdetritusN     ;       1
+      N    ; RdetritusN_vAds      ;    6      ;     3     ; RdetritusN     ;       1     ; RdetritusN     ;       1
+      N    ; RdetritusN_hDix      ;    7      ;     1     ; RdetritusN     ;       1     ; RdetritusN     ;       1
+      N    ; RdetritusN_hDie      ;    7      ;     2     ; RdetritusN     ;       1     ; RdetritusN     ;       1
+      N    ; RdetritusN_hDis      ;    7      ;     3     ; RdetritusN     ;       1     ; RdetritusN     ;       1
+      N    ; RdetritusN_vDis      ;    7      ;     3     ; RdetritusN     ;       1     ; RdetritusN     ;       1
+      N    ; RdetritusN_psrcx     ;    8      ;     0     ; RdetritusN     ;       1     ; RdetritusN     ;       1
+      N    ; RdetritusN_psrce     ;    8      ;     0     ; RdetritusN     ;       1     ; RdetritusN     ;       1
+      N    ; RdetritusN_psrcs     ;    8      ;     0     ; RdetritusN     ;       1     ; RdetritusN     ;       1

@@ -1,0 +1,32 @@
+!+=====================================================================================================================================================
+!+========================================================= MODEL DUMMY VARIABLES =====================================================================
+!+=====================================================================================================================================================
+!+
+!+ - THE LIST BELOW MUST CONTAIN ALL DUMMY VARIABLES INCLUDED IN THE UNDERLYING MODEL, DUMMY VARIABLES ARE VARIABLES EXISTING AS INPUT OR OUTPUT
+!+   VARIABLE OF AT LEAST ONE MODEL FLUX, BUT ARE NOT DEFINED AS REAL STATE VARIABLES IN THE MODEL
+!+
+!+ - LINES STARTING WITH '!+' ARE NOT EVALUATED (I.E. ARE COMMENTS)
+!+
+!+ - EACH LINE MUST CONTAIN ONE COMPLETE SET OF INFORMATION FOR ONE DUMMY VARIABLE
+!+
+!+ - SEMICOLON ';' IS USED TO SEPARATE THE REQUIRED ENTRIES PER DUMMY VARIABLE
+!+
+!+ - THE LENGTH OF THE VARIABLE NAMES IS LIMITED TO *50* DIGITS (see parameter "nameLen" in tbnt_common.f90)
+!+
+!+ - THE LINE LENGTH IS LIMITED TO *250* DIGITS (see parameter "lineLen" in tbnt_common.f90)
+!+
+!+ - A COMPLETE SET OF INFORMATION IS DEINED BY
+!+     1. the *DUMMY VARIABLE NAME* as used by the model and the fluxes defined in MODEL_FLUXES.TXT
+!+
+!+     2. the *AUXILIARY VARIABLE NAME* from which the dummy variable can be derived, name must be as used in the input NetCDF file
+!+
+!+     3. the *FACTOR* by which the AUXILIARY VARIABLE must be multiplied to derive the DUMMY VARIABLE
+!+
+!+ - IF DUMMY VARIABLE NAME AND AUXILIARY VARIABLE NAME ARE IDENTICAL OR FACTOR = 0, THE DUMMY VARIABLE IS INITIALISED WITH ZERO, OTHERISE THE DUMMY
+!+   VARIABLE IS INITIALISED BY MULTIPLYING THE AUXILIARY VARIABLE FIELD WITH THE FACTOR: DUMMY_VAR = AUX_VAR * FACTOR
+!+
+!+=====================================================================================================================================================
+!+============================================================== LIST START ===========================================================================
+!+=====================================================================================================================================================
+!+  DUMMY_VAR  ;  AUX_VAR  ;  FACTOR
+    N2         ;  N2       ;  0
