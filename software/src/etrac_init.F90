@@ -1261,7 +1261,7 @@ subroutine init_tbnt_fluxes_vars(ierr)
    ! copy variables to final variable collection: first 3D variables, second 2D variables
    allocate ( TBNTvar(n_total_var) )
    TBNTvar(1:TBNTnVars3D) = varList3D(1:TBNTnVars3D)
-   TBNTvar(TBNTnVars3D+1:n_total_var) = varList2D(1:TBNTnVars2D)
+   if (TBNTnVars2D>0) TBNTvar(TBNTnVars3D+1:n_total_var) = varList2D(1:TBNTnVars2D)
    deallocate ( varList2D, varList3D )
    
    ! complete variable entries for all fluxes
@@ -2844,7 +2844,7 @@ subroutine init_tbnt_fluxes_vars(ierr)
    allocate ( BULKvar3D(nWetCells, TBNTnVars3D) )
    BULKvar3D  = 0.e0
    allocate ( BULKvar2D(nBotCells, TBNTnVars2D) )
-   BULKvar2D  = 0.e0
+   if (TBNTnVars2D>0) BULKvar2D  = 0.e0
 #else
    ! BUDGET ONLY
    ! BULK variable
