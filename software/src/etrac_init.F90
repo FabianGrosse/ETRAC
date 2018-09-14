@@ -833,7 +833,7 @@ subroutine init_tbnt_fluxes_vars(ierr)
 ! !LOCAL VARIABLES:
 !
    integer                :: ios, iElem, ind, ind1, ind2, nEntry, iiVar
-   integer                :: iFlux, iRivVar
+   integer                :: iFlux, iRivVar, n_dummy_var_2D, n_dummy_var_3D
    real(dp)               :: facVal
    character(len=nameLen) :: elem, facStr, readStr, dummyVar, auxVar
    character(len=lineLen) :: str
@@ -1079,7 +1079,8 @@ subroutine init_tbnt_fluxes_vars(ierr)
    n_total_var = 0
    n_progn_var = 0
    n_diagn_var = 0
-   n_dummy_var = 0
+   n_dummy_var_2D = 0
+   n_dummy_var_3D = 0
    TBNTnVars3D = 0
    TBNTnVars2D = 0
    
@@ -1109,7 +1110,7 @@ subroutine init_tbnt_fluxes_vars(ierr)
             elseif (TBNTflux(iFlux)%varIn%type==TBNTdia2dVar) then
                n_diagn_var = n_diagn_var + 1
             elseif (TBNTflux(iFlux)%varIn%type==TBNTdum2dVar) then
-               n_dummy_var = n_dummy_var + 1
+               n_dummy_var_2D = n_dummy_var_2D + 1
             end if
          else
             TBNTnVars3D = TBNTnVars3D + 1
@@ -1120,7 +1121,7 @@ subroutine init_tbnt_fluxes_vars(ierr)
             elseif (TBNTflux(iFlux)%varIn%type==TBNTdia3dVar) then
                n_diagn_var = n_diagn_var + 1
             elseif (TBNTflux(iFlux)%varIn%type==TBNTdum3dVar) then
-               n_dummy_var = n_dummy_var + 1
+               n_dummy_var_3D = n_dummy_var_3D + 1
             end if
          end if
       end if
@@ -1153,7 +1154,7 @@ subroutine init_tbnt_fluxes_vars(ierr)
          elseif (TBNTflux(iFlux)%varOut%type==TBNTdia2dVar) then
             n_diagn_var = n_diagn_var + 1
          elseif (TBNTflux(iFlux)%varOut%type==TBNTdum2dVar) then
-            n_dummy_var = n_dummy_var + 1
+            n_dummy_var_2D = n_dummy_var_2D + 1
          end if
       else
          TBNTnVars3D = TBNTnVars3D + 1
@@ -1164,13 +1165,13 @@ subroutine init_tbnt_fluxes_vars(ierr)
          elseif (TBNTflux(iFlux)%varOut%type==TBNTdia3dVar) then
             n_diagn_var = n_diagn_var + 1
          elseif (TBNTflux(iFlux)%varOut%type==TBNTdum3dVar) then
-            n_dummy_var = n_dummy_var + 1
+            n_dummy_var_3D = n_dummy_var_3D + 1
          end if
       end if
    end do
-
+   n_dummy_var = n_dummy_var_2D + n_dummy_var_3D
 #ifdef TBNTnoVar2D
-   if (TBNTnVars2D>0) then
+   if (TBNTnVars2D-n_dummy_var_2D>0) then
       ! variable is 2D despite CPP switch TBNTnoVar2D
       ierr = ierr + 1
       write(error_msg,'(a)')'Number of 2D variables greater zero despite CPP switch TBNTnoVar2D'// &
@@ -1234,7 +1235,6 @@ subroutine init_tbnt_fluxes_vars(ierr)
                end do
             end if
          end do varLoop3D
-#ifndef TBNTnoVar2D
          if (.not.useVar) then
             ! loop over 2D variable
             varLoop2D: do iVar = 1,TBNTnVars2D
@@ -1255,16 +1255,13 @@ subroutine init_tbnt_fluxes_vars(ierr)
                end if
             end do varLoop2D
          end if
-#endif
       end do
    end if 
    
    ! copy variables to final variable collection: first 3D variables, second 2D variables
    allocate ( TBNTvar(n_total_var) )
    TBNTvar(1:TBNTnVars3D) = varList3D(1:TBNTnVars3D)
-#ifndef TBNTnoVar2D
    TBNTvar(TBNTnVars3D+1:n_total_var) = varList2D(1:TBNTnVars2D)
-#endif
    deallocate ( varList2D, varList3D )
    
    ! complete variable entries for all fluxes
@@ -2569,18 +2566,14 @@ subroutine init_tbnt_fluxes_vars(ierr)
    ! initialise pointer for variables
    ! pointer - sequence: all variables of source 1, all variables of source 2, ...
    allocate ( TBNTvar3Dpnt(TBNTnVars3D,TBNTnFractions) )
-#ifndef TBNTnoVar2D
    allocate ( TBNTvar2Dpnt(TBNTnVars2D,TBNTnFractions) )
-#endif
    do iFrac = 1,TBNTnFractions
       do iVar = 1,TBNTnVars3D
          TBNTvar3Dpnt(iVar,iFrac) = iVar + (iFrac-1)*TBNTnVars3D
       end do
-#ifndef TBNTnoVar2D
       do iVar = 1,TBNTnVars2D
          TBNTvar2Dpnt(iVar,iFrac) = iVar + (iFrac-1)*TBNTnVars2D
       end do
-#endif
    end do
    
    ! create empty fields used during calculation
@@ -2603,14 +2596,12 @@ subroutine init_tbnt_fluxes_vars(ierr)
    TBNTvar3D = 0.e0
    TBNTrelVar3D = 0.e0
    varChange3D = 0.e0
-#ifndef TBNTnoVar2D
    TBNTnVarFractions2D = TBNTnVars2D*TBNTnFractions
    allocate ( TBNTvar2D(nBotCells,TBNTnVarFractions2D), TBNTrelVar2D(nBotCells,TBNTnVarFractions2D) )
    allocate ( varChange2D(nBotCells,TBNTnVarFractions2D) )
    TBNTvar2D = 0.e0
    TBNTrelVar2D = 0.e0
    varChange2D = 0.e0
-# endif
    
    ! create empty fields for cumulated fluxes and initialise with ZERO
    if (TBNTabsFracOutStep>=0) then
@@ -2641,23 +2632,19 @@ subroutine init_tbnt_fluxes_vars(ierr)
             do iFrac = iOff+1,iOff+TBNTnVars3D
                where (.not.excludeCell3D) TBNTrelVar3D(:,iFrac) = 1.e0
             end do
-#ifndef TBNTnoVar2D
             iOff = TBNTnVars2D*(TBNTnFractions-1)
             do iFrac = iOff+1,iOff+TBNTnVars2D
                where (.not.excludeCell2D) TBNTrelVar2D(:,iFrac) = 1.e0
             end do
-#endif
          else
             ! UNTRACED source does not exist
             ! => equally distribute initial mass among all sources
             do iFrac = 1,TBNTnVarFractions3D
                where (.not.excludeCell3D) TBNTrelVar3D(:,iFrac) = 1.e0/real(TBNTnFractions,dp)
             end do
-#ifndef TBNTnoVar2D
             do iFrac = 1,TBNTnVarFractions2D
                where (.not.excludeCell2D) TBNTrelVar2D(:,iFrac) = 1.e0/real(TBNTnFractions,dp)
             end do
-#endif
          end if
       else
          ! specific source selected as initial source
@@ -2671,12 +2658,10 @@ subroutine init_tbnt_fluxes_vars(ierr)
          do iFrac = iOff+1,iOff+TBNTnVars3D
             where (.not.excludeCell3D) TBNTrelVar3D(:,iFrac) = 1.e0
          end do
-#ifndef TBNTnoVar2D
          iOff = TBNTnVars2D*(TBNTiniFrac-1)
          do iFrac = iOff+1,iOff+TBNTnVars2D
             where (.not.excludeCell2D) TBNTrelVar2D(:,iFrac) = 1.e0
          end do
-#endif
       end if
    end if
 
@@ -2755,7 +2740,7 @@ subroutine init_tbnt_fluxes_vars(ierr)
             TBNTrelVar3D(:,iVarPnt) = real(0.0,dp)
          end where
       end do
-#ifndef TBNTnoVar2D
+
       do iVar = 1,TBNTnVars2D
          iVarPnt = TBNTvar2Dpnt(iVar,iFrac)
          varName = trim(TBNTvar(TBNTnVars3D+iVar)%name)//'-'//trim(TBNTfracName(iFrac))
@@ -2766,7 +2751,6 @@ subroutine init_tbnt_fluxes_vars(ierr)
             TBNTrelVar2D(:,iVarPnt) = real(0.0,dp)
          end where
       end do
-#endif
    end do
    
    ! close warmstart file
@@ -2859,10 +2843,8 @@ subroutine init_tbnt_fluxes_vars(ierr)
 
    allocate ( BULKvar3D(nWetCells, TBNTnVars3D) )
    BULKvar3D  = 0.e0
-#ifndef TBNTnoVar2D
    allocate ( BULKvar2D(nBotCells, TBNTnVars2D) )
    BULKvar2D  = 0.e0
-#endif
 #else
    ! BUDGET ONLY
    ! BULK variable
