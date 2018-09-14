@@ -236,12 +236,10 @@
    real(dp)             , dimension(:,:)    , allocatable :: varChange3D          ! array of integrated change in 3D fraction variables per time step
    integer                                                :: TBNTnVars2D          ! total number of 2D bulk variables
    integer                                                :: TBNTnVarFractions2D  ! total number of 2D variable fractions
-#ifndef TBNTnoVar2D
    integer              , dimension(:,:)    , allocatable :: TBNTvar2Dpnt         ! pointer for 2D variable fractions
    real(dp)             , dimension(:,:)    , allocatable :: TBNTvar2D            ! array of 2D absolute variable fractions
    real(dp)             , dimension(:,:)    , allocatable :: TBNTrelVar2D         ! array of 2D absolute variable fractions
    real(dp)             , dimension(:,:)    , allocatable :: varChange2D          ! array of integrated change in 2D fraction variables per time step
-#endif
    type(TBNTfluxProps)  , dimension(:)      , allocatable :: TBNTflux             ! collection of all fluxes on fractionated variables
    type(TBNTmodVarProps), dimension(:)      , allocatable :: TBNTvar              ! collection of all fractionated variables
    ! linked fluxes related
