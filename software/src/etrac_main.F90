@@ -200,7 +200,7 @@
    integer, intent(in   ) :: iReadRec
 !
 ! !LOCAL VARIABLES:
-#ifndef TBNTonly_bulk_bud
+#if !defined TBNTonly_bulk_bud & !defined TBNTnoVar2D
    integer                :: iiVar
 #endif
 !-----------------------------------------------------------------------
@@ -391,6 +391,8 @@
 !-----------------------------------------------------------------------
 #include "call-trace.inc"
 
+   iiVar = 0
+
    srcName = 'BULK'
    do iVar = 1,TBNTnVars3D ! 3D variables
       if (TBNTvar(iVar)%type==TBNTdum3dVar.and.TBNTvar(iVar)%auxVar%fac==0.e0) cycle
@@ -539,7 +541,6 @@
             end if
          end do
       end do
-#ifndef TBNTnoVar2D
       ! 2D variables
       do iVar = 1,TBNTnVars2D
          iiVar = iVar + TBNTnVars3D
@@ -564,7 +565,6 @@
             end if
          end do
       end do
-#endif
    end do fractionLoop
    
    if (integ_err/=0) then
@@ -596,24 +596,18 @@
    
    ! if integ_err==0: update variables
    TBNTvar3D = TBNTvar3D + varChange3D*flxFac_
-#ifndef TBNTnoVar2D
    TBNTvar2D = TBNTvar2D + varChange2D*flxFac_
-#endif
 
    ! cumulate fraction fluxes
    if (TBNTabsFracOutStep>=0) then
       TBNTflux3D = TBNTflux3D + tempFlxFrac3D*flxFac_
-#ifndef TBNTnoVar2D
       TBNTflux2D = TBNTflux2D + tempFlxFrac2D*flxFac_
-#endif
    end if
    
    ! cumulate linked fraction fluxes
    if (TBNTlinkedFluxes) then
       TBNTlinkedFlux3D = TBNTlinkedFlux3D + lnkFlxFrac3D*flxFac_
-#ifndef TBNTnoVar2D
       TBNTlinkedFlux2D = TBNTlinkedFlux2D + lnkFlxFrac2D*flxFac_
-#endif
    end if
 
    end subroutine update_tbnt_fractions
@@ -874,6 +868,8 @@
 !-----------------------------------------------------------------------
 #include "call-trace.inc"
    
+   iiVar = 0
+
    do iFrac = 1,TBNTnFractions
       do iVar = 1,TBNTnVars3D ! 3D variables
          if (TBNTvar(iVar)%type==TBNTdum3dVar.and.TBNTvar(iVar)%auxVar%fac==0.e0) cycle ! skip dummy variables w/o auxiliary variable
@@ -928,14 +924,12 @@
          where (.not.excludeCell3D.and.abs(TBNTvar3D(:,iVarPnt))<epsFrac) TBNTvar3D(:,iVarPnt) = 0.e0
          where (.not.excludeCell3D) BULKvar3D(:,iVar) = BULKvar3D(:,iVar) + TBNTvar3D(:,iVarPnt)
       end do
-#ifndef TBNTnoVar2D
       ! 2D variables
       do iVar = 1,TBNTnVars2D
          iVarPnt = TBNTvar2Dpnt(iVar,iFrac)
          where (.not.excludeCell2D.and.abs(TBNTvar2D(:,iVarPnt))<epsFrac) TBNTvar2D(:,iVarPnt) = 0.e0
          where (.not.excludeCell2D) BULKvar2D(:,iVar) = BULKvar2D(:,iVar) + TBNTvar2D(:,iVarPnt)
       end do
-#endif
    end do
    
    ! calculate relative fractions
@@ -961,7 +955,6 @@
             end if
          end do
       end do
-#ifndef TBNTnoVar2D
       ! 2D variables
       do iVar = 1,TBNTnVars2D
          iVarPnt = TBNTvar2Dpnt(iVar,iFrac)
@@ -984,7 +977,6 @@
             end if
          end do
       end do
-#endif
    end do
    
    end subroutine calc_tbnt_relative_fractions
@@ -1041,9 +1033,7 @@
       
    ! empty cumulated change applied to variable s
    varChange3D = 0.e0
-#ifndef TBNTnoVar2D
    varChange2D = 0.e0
-#endif
 
    i_fr = 0
    iNeigh = 0
@@ -1140,7 +1130,6 @@
                end do
             end if
          end do
-#ifndef TBNTnoVar2D
       elseif (isVari3D.and..not.isVaro3D) then
          ! =====================================================================
          ! 3D flux, 3D input variable, 2D output variable (pelagial to sediment)
@@ -1210,7 +1199,6 @@
                end do
             end if
          end do
-#endif
       end if
    end do
 
@@ -1237,7 +1225,6 @@
           TBNTflux(iiFlux)%varOut%type==TBNTdum2dVar) isVaro3D = .false. ! output variable is 2D
       ! UPDATE BULK VARIABLES AND VARIABLE FRACTIONS DEPENDING ON DIMENSIONALITY OF INVOLVED VARIABLES
       flx2D = BULKflux2D(:,iFlux) ! get bulk flux
-#ifndef TBNTnoVar2D
       if (isVari3D.and..not.isVaro3D) then
          ! =====================================================================
          ! 2D flux, 3D input variable, 2D output variable (pelagial to sediment)
@@ -1313,9 +1300,6 @@
             end do
          end do
       elseif  (isVari3D.and.isVaro3D) then
-#else
-      if (isVari3D.and.isVaro3D) then
-#endif
          ! ==============================================================================================
          ! 2D flux, 3D input variable, 3D output variable (processes via sediment or air-sea exchange)
          ! ==============================================================================================
@@ -1743,7 +1727,10 @@
    real(dp), parameter :: eps = 1.e-20
 
    integer :: iiVar, iTarget, iArea, varType
-   logical :: mask2D(nBotCells), mask3D(nWetCells)
+   logical :: mask3D(nWetCells)
+#ifndef TBNTnoVar2D
+   logical :: mask2D(nBotCells)
+#endif
 !
 !-----------------------------------------------------------------------
 #include "call-trace.inc"
@@ -1833,11 +1820,9 @@
    do iVar = 1,TBNTnVars3D ! 3D variables
       BULKcalc(iVar) = sum(BULKvar3D(:,iVar),.not.excludeCell3D)
    end do
-#ifndef TBNTnoVar2D
    do iVar = 1,TBNTnVars2D ! 2D variables
       BULKcalc(TBNTnVars3D+iVar) = sum(BULKvar2D(:,iVar),.not.excludeCell2D)
    end do
-#endif
 
    ! get BULK masses at end of TBNT run from input NetCDF file
    call get_vols(TBNTiEnd, ierr)
@@ -1845,11 +1830,9 @@
    do iVar = 1,TBNTnVars3D ! 3D variables
       BULKread(iVar) = sum(BULKvar3D(:,iVar)/volOldIn*volNewIn,.not.excludeCell3D)
    end do
-#ifndef TBNTnoVar2D
    do iVar = 1,TBNTnVars2D ! 2D variables
       BULKread(TBNTnVars3D+iVar) = sum(BULKvar2D(:,iVar),.not.excLudeCell2D)
    end do
-#endif
    
    ! write BULK variables to log file
    call breakLine(60)
