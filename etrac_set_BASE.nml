@@ -1,23 +1,23 @@
 ! BASIC ETRAC SET-UP
 &tbnt_run_nml
-runID         = 'RUNID_TMP'
-isWarmStart   = ISWARM_TMP
-continueWrite = CONTINUE_TMP
-tbnt_set_dir  = 'TEMPPATH_TMPetrac_setup/'
-bulk_nc_dir   = 'BULKPATH_TMP'
-bulk_nc_file  = 'BULKFILE_TMP'
-init_nc_dir   = 'INITPATH_TMP'
-init_nc_file  = 'INITFILE_TMP'
+runID         = 'RUNID_TMP'                   ! run identifier used in output files
+isWarmStart   = ISWARM_TMP                    ! switch if run is initialized with relative tracer distributions from a file (1) or not (0)
+continueWrite = CONTINUE_TMP                  ! continue writing into existing file (1) or not (0); required if single year is split in multiple jobs
+tbnt_set_dir  = 'TEMPPATH_TMPetrac_setup/'    ! directory of setup files
+bulk_nc_dir   = 'BULKPATH_TMP'                ! directory of bulk NetCDF files (i.e. model output files with concentrations and fluxes of tracers)
+bulk_nc_file  = 'BULKFILE_TMP'                ! name of bulk NetCDF file
+init_nc_dir   = 'INITPATH_TMP'                ! directory of initialization file (i.e. file with relative tracer distributions)
+init_nc_file  = 'INITFILE_TMP'                ! name of initialization file
 /
 
 ! TIME SET-UP
 &time_setup_nml
-year        = YEAR_TMP
-timeStep    = DT_TMP
-startStep   = START_TMP
-endStep     = END_TMP
-offsetStep  = OFFSET_TMP
-subTimeStep = DT_SUB_TMP
+year        = YEAR_TMP                        ! year of current run
+timeStep    = DT_TMP                          ! time step of input data (i.e. of model output)
+startStep   = START_TMP                       ! index of first time step to be calculated
+endStep     = END_TMP                         ! index of last time step to be calculated
+offsetStep  = OFFSET_TMP                      ! needed if first year of run cannot be started on first day; then: offsetStep = startStep - 1
+subTimeStep = DT_SUB_TMP                      ! define constant sub-time step, must be proper divider of timeStep; if no time step subdivision, set equal to timeStep
 /
 
 ! DEFINE NAMES OF AREA AND VOLUME VARIABLES TO BE READ FROM NC FILE
@@ -64,7 +64,7 @@ initialFraction =          1         ! index of fraction (i.e., source) to which
                                      !         --                 otherwise: initial mass is attributed equally to all sources
 /
 
-! selection of elements
+! selection of elements (number of namelists must match nTracedElements in &fraction_numbers_nml)
 &element_nml  tracedElement = 'N'  / ! Nitrogen (N)
 !&element_nml  tracedElement = 'C'  / ! Carbon (C)
 !&element_nml  tracedElement = 'P'  / ! Phosphorus(P)
