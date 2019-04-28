@@ -35,10 +35,10 @@ model_dummy_vars_file = 'model_dummy_vars_ROMS.txt'                           ! 
 model_rivers_file     = 'model_rivers_NGoMex_MCH_Mississippi_Atchafalaya.txt' ! file containing information about all model rivers
 /
 
-! INDEX-RELATED INFORMATION (outside offset region mass conservation is not guaranteed)
+! INDEX-RELATED INFORMATION
 &indexing_nml
-dimName_x       = 'xi_rho'                      ! name of dimension in horizontal x-direction (cdo changes "xi_rho" to "x_3")
-dimName_y       = 'eta_rho'                     ! name of dimension in horizontal y-direction (cdo changes "eta_rho" to "y_2")
+dimName_x       = 'xi_rho'                      ! name of dimension in horizontal x-direction
+dimName_y       = 'eta_rho'                     ! name of dimension in horizontal y-direction
 dimName_z       = 's_rho'                       ! name of dimension in vertical direction
 gridName_x      = 'lon_rho'                     ! name of grid variable for horizontal x-direction
 gridName_y      = 'lat_rho'                     ! name of grid variable for horizontal y-direction
@@ -46,7 +46,7 @@ gridName_z      = 's_rho'                       ! name of grid variable for vert
 n_x             = 128                           ! number of indices in horizontal x-direction
 n_y             = 64                            ! number of indices in horizontal y-direction
 n_z             = 20                            ! number of indices in vertical direction
-offset_xStart   = 1                             ! starting offset in x-direction
+offset_xStart   = 1                             ! starting offset in x-direction (outside of offset region mass balances are not properly closed)
 offset_xEnd     = 1                             ! ending offset in x-direction
 offset_yStart   = 1                             ! starting offset in y-direction
 offset_yEnd     = 1                             ! ending offset in y-direction
@@ -85,7 +85,7 @@ linkedFlx_file   = 'linked_fluxes_ROMS.txt'  ! file with definition of linked fl
 &river_groups_nml     tracedGroupName = 'Mississippi'       nTracedRivers =  43 / ! 1st group of rivers
 &river_groups_nml     tracedGroupName = 'Atchafalaya'       nTracedRivers =  12 / ! 2nd group of rivers
 
-! RIVERS: river name, group index (according to order of previous name lists "river_groups_nml")
+! RIVERS: river name (as used in model_rivers_file), group index (according to order of previous name lists "river_groups_nml")
 &river_fraction_nml     tracedRivName = 'Mississippi-01'            rivGroupID = 1 /
 &river_fraction_nml     tracedRivName = 'Mississippi-02'            rivGroupID = 1 /
 &river_fraction_nml     tracedRivName = 'Mississippi-03'            rivGroupID = 1 /
@@ -145,10 +145,10 @@ linkedFlx_file   = 'linked_fluxes_ROMS.txt'  ! file with definition of linked fl
 ! OPEN BOUNDARY SOURCES: set name of input file
 &openb_fraction_nml     openb_file = 'etrac_openb_source_NGoMex_MCH_NGoMex_SINGLE.txt' / ! read open boundary sources indices
 
-! ATMOSPHERIC DEPOSITION SOURCES: set name input file
-&atmos_fraction_nml     atmos_file = 'etrac_atmos_source_NGoMex_MCH_NGoMex.txt' / ! read atmospheric source indices
+! ATMOSPHERIC DEPOSITION SOURCES: set name of input file (only used if atmospheric sources exist)
+&atmos_fraction_nml     atmos_file = 'etrac_atmos_source_DUMMY.txt' / ! read atmospheric source indices
 
-! BULK VARIABLE BUDGET/BALANCE
+! BULK VARIABLE BUDGET/BALANCE (only used if CPP flag TBNTonly_bulk_bud is defined)
 &bulk_bud_nml     balVarName = 'LdetritusN'     iBal = 82     jBal = 21     kBal = 20 /
 
 ! DEFINE OUTPUT
@@ -157,17 +157,17 @@ output_dir       = 'OUTPUTPATH_TMP'
 relFracOutStep   =         1              ! OUTPUT INTERVAL RELATIVE FRACTIONS (only variables):
                                           ! <0 --> no output
                                           !  0 --> output written only at beginning and end of simulation
-                                          !  1 --> data written at based on input data time step (status at end of each time step)
+                                          !  1 --> data written based on input data time step (status at end of each time step)
                                           ! >1 --> values written at defined interval
 absFracOutStep   =         1              ! OUTPUT INTERVAL ABSOLUTE FRACTIONS (variables and fluxes):
                                           ! <0 --> no output
                                           !  0 --> output written only at beginning and end of simulation (0 means cumulation over whole year)
-                                          !  1 --> data written at based on input data time step (cumulated over each time step)
+                                          !  1 --> data written based on input data time step (cumulated over each time step)
                                           ! >1 --> values cumulated over defined interval
 targetOutput     =         0              ! SWITCH FOR TARGET AREA OUTPUT 
                                           !  0 --> no output
                                           !  1 --> create ascii output for the areas and variables defined in the 2 subsequently listed files
                                           
 target_area_file = 'target_areas_NGoMex_MCH_NGoMex_4+8boxes.txt'     ! file with definition of target areas
-target_vars_file = 'target_variables_ROMS.txt'                       ! file with definition of target variables and associated periods
+target_vars_file = 'target_variables_ROMS.txt'                       ! file with definition of target variables and associated analysis periods
 /
