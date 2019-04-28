@@ -5,7 +5,7 @@ Element TRACing software for numerical models
 
 Introduction
 
-The ETRAC software is a software that allows for the tracing of elements from individual sources through all physical and biogeochemical processes represented by the physical-biogeochemical model, to which it is applied. The software was initially developed for the ECOHAM North Sea model (Große et al., 2017; doi: 10.3389/fmars.2017.00383), however, with the intention to make it applicable also to other models. It requires specific model output, which needs to be implemented to the model to be used if it is not implemented already. For ROMS, this output has been implemented based on ROMS 3.7. Detailed information on the theory and implementation of the element tracing, and the model output requirements can be found in the documentation.
+The ETRAC software allows for the tracing of elements from individual sources through all physical and biogeochemical processes represented by the physical-biogeochemical model, to which it is applied. The software was initially developed for the ECOHAM North Sea model (Große et al., 2017; doi: 10.3389/fmars.2017.00383), however, with the intention to make it applicable also to other models. It requires specific model output, which needs to be implemented to the model to be used if it is not implemented already. For ROMS, this output has been implemented based on ROMS 3.7. Detailed information on the theory and implementation of the element tracing, and the model output requirements can be found in the documentation.
 
 
 
