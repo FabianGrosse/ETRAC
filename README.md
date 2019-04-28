@@ -19,9 +19,9 @@ Source code (and compilation)
 The ETRAC software is written in Fortran and requires Fortran 2000 compatibility of the compiler.
 The source code and the scripts to compile the software can be found in /software.
 
-To compile ETRAC, change into /software and run ./compile.sh
+To compile ETRAC, you need to provide a make configuration file for your architecture in /software/src/make-config/
+Afterwards, you can change into /software and run ./compile.sh
 
-You will need a make configuration file for your architecture in /software/src/make-config/
 
 
 
