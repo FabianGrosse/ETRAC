@@ -4,9 +4,9 @@ domain        = 'NGoMex'                                                        
 gridFile      = '/misc/1/input/grosse/ROMS_forcing/roms854/mch_grd.nc'                         ! grid file location
 gridID        = 'NGoMex_MCH'                                                                   ! user-defined name of grid setup
 hisFile       = '/misc/7/output/grosse/roms854-NGoMEX-MCH_CEDAR/his_mch_bio_tbnt_0001.nc'      ! HIS file location
-n_xi_var      = 'xi_rho'                                                                       ! name of Xi index variable
-n_eta_var     = 'eta_rho'                                                                      ! name of Eta index variable
-hcrit         = 5.0                                                                            ! critical layer thickness 
+n_xi_var      = 'xi_rho'                                                                       ! name of Xi index variable in grid file
+n_eta_var     = 'eta_rho'                                                                      ! name of Eta index variable in grid file
+hcrit         = 5.0                                                                            ! critical layer thickness as in grid file
 n_boundary    = 1                                                                              ! number of additional rho points at each outer boundary
 closedNB      = .true.                                                                         ! closed northern boundary?
 closedSB      = .false.                                                                        ! closed southern boundary?
@@ -15,12 +15,19 @@ closedEB      = .false.                                                         
 includeAtmos  = .false.                                                                        ! include atmospheric N deposition?
 riverFile     = '/misc/1/input/grosse/ROMS_forcing/roms854/mch_river_1982_2016_Rdet_prov.nc'   ! river file location
 riverID       = 'Mississippi_Atchafalaya'                                                      ! user-defined name of river setup
-river_xi_off  = 0                                                                              ! offset of river location in Xi direction (i.e., number of Xi indices been removed during cutting of regions
-river_eta_off = 0                                                                              ! offset of river location in Eta direction (i.e., number of Eta indices been removed during cutting of regions
+river_xi_off  = 0                                                                              ! offset of river location in Xi direction relative to bottom-left corner of original model grid
+river_eta_off = 0                                                                              ! offset of river location in Eta direction relative to bottom-left corner of original model grid
+                                                                                               ! NOTE: offsets >0 only required  if ETRAC is applied to domain cut from original domain (e.g. with cdo),
 nRivers       = 2                                                                              ! number of rivers in domain: if > 0: number of river masks to be read
                                                                                                !                             if < 0: number of rivers (with only one location per river)
-boxID         = 'NGoMex_4+8boxes'                                                              ! box setup identifier
-boxInfoType   = 'depth_lon'                                                                    ! type of box information
+boxID         = 'NGoMex_4+8boxes'                                                              ! box setup identifier (use 'none' or 'off' if not used)
+boxInfoType   = 'depth_lon'                                                                    ! type of box information: 'depth_lon' uses depth range and longitudinal range; example: NGoMex_4+8boxes.txt
+                                                                                               !                          'nicemap'   requires a table of box names and codes and up to two ASCII maps of the model grid
+                                                                                               !                                      with boxes defined using the codes in the table; example: *NWCS20D_EMECO* (for ECOHAM model)
+                                                                                               !                                      file names of the files must have the form:
+                                                                                               !                                      box-table_[gridID]_[boxID].txt    => table with box names and codes
+                                                                                               !                                      nice-map_[gridID]_[boxID]_top.txt => ASCII map for surface boxes (or all boxes if separation depth = 0)
+                                                                                               !                                      nice-map_[gridID]_[boxID]_bot.txt => ASCII map for bottom boxes (only needed if separation depth > 0)
 boxSepDepth   = 30                                                                             ! box separation depth
 boxMaxXi      = 92                                                                             ! box maximum Xi index (regions with higher Xi index are excluded from boxes)
 boxMaxEta     = 1000                                                                           ! box maximum Eta index (regions with higher Eta index are excluded from boxes)
