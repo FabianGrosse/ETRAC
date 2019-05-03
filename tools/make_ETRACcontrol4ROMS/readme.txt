@@ -8,11 +8,11 @@ To run the compiled programs just execute "./[name of the tool].x
 1. make_nicemap4ROMS.f90
  - this program reads the ROMS grid file and creates an ASCII land-sea mask, which is used as template
    for the creation of the input files used by the 2nd script (make_TBNTcontrol4ROMS.f90)
+ - its input is defined in the namelist file grid.nml
 
 2. make_TBNTcontrol4ROMS.f90
- - this program reads the ROMS grid file, river forcing file, a HIS file, a nudging file (optional), and the ASCII nice maps for TBNT sources
-   and creates standardized input files for the ETRAC application
- - its input is defined in the FORTRAN name lists setup.nml and grid.nml
+ - this program reads the ROMS grid file, river forcing file, a HIS file, a nudging file (optional), and the ASCII nice maps for TBNT sources and creates standardized input files for the ETRAC application
+ - its input is defined in the FORTRAN name list file setup.nml
  - the names of the grid, river forcing, HIS and nudging files are defined in the name lists
  - the names of the ASCII input files must be as follows:
     - tbnt_openb_source_map_from_[DOMAIN].txt
