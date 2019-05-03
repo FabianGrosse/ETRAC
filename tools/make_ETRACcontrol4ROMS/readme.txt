@@ -18,7 +18,7 @@ To run the compiled programs just execute "./[name of the tool].x
     - tbnt_openb_source_map_from_[DOMAIN].txt
     - tbnt_openb_source_map_to_[DOMAIN].txt
     - tbnt_exclude_map_[DOMAIN].txt
-    - tbnt_atmos_source_map.txt
+    - tbnt_atmos_source_map_[DOMAIN].txt
     
    "[DOMAIN]" is a place holder for the "domain" name defined in the setup.nml
    
