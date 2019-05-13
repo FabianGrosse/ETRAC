@@ -7,7 +7,10 @@ setenv SOURCE_DIR ./src
 
 setenv NC_CONFIG /cvmfs/soft.computecanada.ca/easybuild/software/2017/avx2/Compiler/intel2016.4/netcdf-fortran/4.4.4/bin/nc-config
 
-module load netcdf-fortran/4.4.4
+module purge
+module load hdf5
+module load netcdf
+module load netcdf-fortran
 
 set RUN_DIR=$PWD
 mkdir -p $BUILD_DIR
