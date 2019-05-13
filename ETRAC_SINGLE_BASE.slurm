@@ -38,7 +38,10 @@
 #SBATCH --error=%x-%j.err
 #
 # LOAD NETCDF LIBRARY
-module load netcdf-fortran/4.4.4
+module purge
+module load hdf5
+module load netcdf
+module load netcdf-fortran
 
 # SEND JOB
 echo ' '
