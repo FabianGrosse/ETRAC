@@ -233,6 +233,8 @@ program make_ETRACcontrol
 
    iiwet = iiwet2 * n_sigma ! number of wet points
 
+   call system("mkdir -p "//trim(outDir))
+
    ! CREATE MAP FILE WITH MAXIMUM k INDICES
    allocate ( k_index(n_xi,n_eta) )
    where (mask_rho >= 0.5)
