@@ -11,7 +11,7 @@ To run the compiled programs just execute "./[name of the tool]
  - its input is defined in the namelist file grid.nml
 
 2. make_ETRACcontrol4ROMS.f90
- - this program reads the ROMS grid file, river forcing file, a HIS file, a nudging file (optional), and the ASCII nice maps for TBNT sources and creates standardized input files for the ETRAC application
+ - this program reads the ROMS grid file, river forcing file, a HIS file, a nudging file (optional), and the ASCII nice-maps for ETRAC sources and creates standardized input files for the ETRAC application
  - its input is defined in the FORTRAN name list file setup.nml
  - the names of the grid, river forcing, HIS and nudging files are defined in the name lists
  - the names of the ASCII input files must be as follows:
