@@ -688,7 +688,7 @@ program make_ETRACcontrol
 
    formatStr = '(i3,XXi10,a,a)'
    write(formatStr(5:6),'(i2)') n_sigma
-   open(outUnit, file = trim(outDir)//'river_list_'//trim(gridID)//'_'//trim(riverID)//'.txt')
+   open(outUnit, file = trim(outDir)//'model_rivers_'//trim(gridID)//'_'//trim(riverID)//'.txt')
    ! write header to file
    write(outUnit,'(a)')'!+=================================================================================================='
    write(outUnit,'(a)')'!+================================ LIST OF INPUT POINTS FOR RIVERS ================================='
