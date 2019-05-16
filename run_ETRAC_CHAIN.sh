@@ -104,7 +104,7 @@ JOB_ACC='def-kfennel'
 MEM_CPU='7000M'
 JOB_NAME=ETRAC_${runID}_CHAIN
 NTASKS=1
-USER_EMAIL='fabian.grosse@dal.ca'
+USER_EMAIL='DUMMY.USER@EMAIL.COM'
 # time limit: days, hours, minutes and seconds; individual 2-digit strings
 JOB_DD='02' # days
 JOB_HH='23' # hours
