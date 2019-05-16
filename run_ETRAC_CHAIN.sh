@@ -10,6 +10,7 @@
 #   1) a (sub-)job fails before entering time loop => job abortion
 #   2) a simulation blows up                       => job abortion
 #   3) a (sub-)job failed due to cluster failure   => auto-continuation
+#        of time-out
 # =====================================================================
 # HOW TO USE?
 # 1) define set-up in script header
