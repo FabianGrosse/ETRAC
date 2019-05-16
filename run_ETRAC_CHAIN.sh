@@ -5,6 +5,7 @@
 # =====================================================================
 # relevant functions:
 # - automatic continuation if job was cancelled due to cluster failure
+#   or time out
 #
 # - email notifications are send to user if:
 #   1) a (sub-)job fails before entering time loop => job abortion
