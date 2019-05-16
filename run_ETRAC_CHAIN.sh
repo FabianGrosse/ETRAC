@@ -27,7 +27,6 @@
 debug=0
 
 # define calculation ID (used for names of output files)
-#runID=roms854-NGoMex-TBNT
 runID=roms854-MCH-ETRAC
 
 # set directories and names of input, output and temporary files
