@@ -28,22 +28,24 @@ debug=0
 
 # define calculation ID (used for names of output files)
 #runID=roms854-NGoMex-TBNT
-runID=roms854-test
+runID=roms854-MCH-ETRAC
 
 # set directories and names of input, output and temporary files
 # NOTE: directories require '/' at end of name
-#       initPath and outputPath must match in case of a series of jobs
 #
 # path and file name of merged yearly ROMS output files
 # for running multiple years, use YEAR_TMP placeholder in file name
-bulkPath=/scratch/grosse/roms854_TBNT-N_NGoMex_PERFECT_RST/
+bulkPath=/project/def-kfennel/grosse/ETRAC_data/
 bulkDummy=tbnt_mch_bio_tbnt_YEAR_TMP.nc
 # path and file name of initialization files (i.e. distributions of relative tracer fractions)
-# for running multiple years, use INIYEAR_TMP placeholder in file name
-initPath=/scratch/grosse/ETRAC_${runID}/
+#  - for running multiple years, use INIYEAR_TMP placeholder in file name
+#  - init file name must be of structure "${runID}_INIYEAR_TMP_relative_fractions.nc"
+#    when running a sequence of multiple years
+initPath=/project/def-kfennel/grosse/ETRAC_data/
 initDummy=${runID}_INIYEAR_TMP_relative_fractions.nc
 # output path
-outputPath=/scratch/grosse/ETRAC_${runID}/
+#  - initPath and outputPath must match in case of a sequence of jobs
+outputPath=/project/def-kfennel/grosse/ETRAC_data/
 # temporary path used only during the job
 tmpPath=/scratch/grosse/ETRAC_${runID}_TMP/
 
