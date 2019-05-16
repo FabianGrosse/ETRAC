@@ -472,14 +472,14 @@ while [ ${IJOB} -le ${NJOBS} ]; do
       # job failed due to time limit exceedance
       # check if time loop was entered
       if [ "$(grep MAIN\ STEP ${wrkPath}/${logFile} | wc -l)" -eq 0 ]; then
-	# time limit exceeded before entering time loop
-	# send notification email to user and abort script => no further job submission
-	if [ ${debug} -eq 1 ]; then
-          echo -e "${runID}_${IJOB}-${RSTcount} (slurm ID: ${slurmJobID}) failed\nJob time limit exceeded before entering time loop.\nIncrease your time limit!"
-        else
-          echo -e "Job time limit exceeded before entering time loop.\nIncrease your time limit!" | mail -s "${runID}_${IJOB}-${RSTcount} (slurm ID: ${slurmJobID}) failed" ${USER_EMAIL}
-        fi
-        exit
+         # time limit exceeded before entering time loop
+         # send notification email to user and abort script => no further job submission
+         if [ ${debug} -eq 1 ]; then
+            echo -e "${runID}_${IJOB}-${RSTcount} (slurm ID: ${slurmJobID}) failed\nJob time limit exceeded before entering time loop.\nIncrease your time limit!"
+         else
+            echo -e "Job time limit exceeded before entering time loop.\nIncrease your time limit!" | mail -s "${runID}_${IJOB}-${RSTcount} (slurm ID: ${slurmJobID}) failed" ${USER_EMAIL}
+         fi
+         exit
       fi
       # time limit exceeded during calculation
       jobOK=0
