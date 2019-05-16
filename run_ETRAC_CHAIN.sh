@@ -46,10 +46,10 @@ initDummy=${runID}_INIYEAR_TMP_relative_fractions.nc
 outputPath=/scratch/grosse/TBNT_${runID}/
 tmpPath=/scratch/grosse/TBNT_${runID}_TMP/
 
-# directories with model and TBNT setup files
+# directories with model and ETRAC setup files
 # NOTE: no '/' at end of names
 modelPath=/home/grosse/ETRAC/setup_files/model_setup
-tbntPath=/home/grosse/ETRAC/setup_files/etrac_setup
+etracPath=/home/grosse/ETRAC/setup_files/etrac_setup
 
 # set template file used for TBNT setup
 setBase=etrac_set_BASE.nml
@@ -330,7 +330,7 @@ while [ ${IJOB} -le ${NJOBS} ]; do
     ln -s ${setFile} etrac_set.nml
     cp -f $projPath/Build/ETRAC .
     cp -rf $modelPath .
-    cp -rf $tbntPath .
+    cp -rf $etracPath .
     cp -f $projPath/${scriptLog} .
     # submit job and get slurm job ID
     # job is submitted first, job ID is determined afterwards
