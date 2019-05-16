@@ -40,12 +40,12 @@ bulkPath=/scratch/grosse/roms854_TBNT-N_NGoMex_PERFECT_RST/
 bulkDummy=tbnt_mch_bio_tbnt_YEAR_TMP.nc
 # path and file name of initialization files (i.e. distributions of relative tracer fractions)
 # for running multiple years, use INIYEAR_TMP placeholder in file name
-initPath=/scratch/grosse/TBNT_${runID}/
+initPath=/scratch/grosse/ETRAC_${runID}/
 initDummy=${runID}_INIYEAR_TMP_relative_fractions.nc
 # output path
-outputPath=/scratch/grosse/TBNT_${runID}/
+outputPath=/scratch/grosse/ETRAC_${runID}/
 # temporary path used only during the job
-tmpPath=/scratch/grosse/TBNT_${runID}_TMP/
+tmpPath=/scratch/grosse/ETRAC_${runID}_TMP/
 
 # project and work paths
 #  - the project path contains all scripts (incl. this very one), template files, the 'Build' folder
