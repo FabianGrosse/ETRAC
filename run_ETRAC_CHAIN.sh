@@ -37,11 +37,11 @@ submitJob=0
 
 # set directories and names of input, output and temporary files
 # NOTE: directories require '/' at end of name
+#       initPath and outputPath must match in case of a series of jobs
 bulkPath=/scratch/grosse/roms854_TBNT-N_NGoMex_PERFECT_RST/
 bulkDummy=tbnt_mch_bio_tbnt_YEAR_TMP.nc
 initPath=/scratch/grosse/TBNT_${runID}/
 initDummy=${runID}_INIYEAR_TMP_relative_fractions.nc
-#outputPath=/scratch/grosse/TBNT_roms854-NGoMEX-MCH_CHAIN/
 outputPath=/scratch/grosse/TBNT_${runID}/
 tmpPath=/scratch/grosse/TBNT_${runID}_TMP/
 
