@@ -10,7 +10,7 @@
 #   1) a (sub-)job fails before entering time loop => job abortion
 #   2) a simulation blows up                       => job abortion
 #   3) a (sub-)job failed due to cluster failure   => auto-continuation
-#        of time-out
+#        or time-out
 # =====================================================================
 # HOW TO USE?
 # 1) define set-up in script header
@@ -348,9 +348,15 @@ while [ ${IJOB} -le ${NJOBS} ]; do
       if [ -e jobStart ]; then
         running=1
       else
-        sleep 60
+        sleep 300
       fi
     done
+    # check for early job error
+    if [ -e jobEnd ]; then
+       echo -e "ETRAC calculation using ${runFile} and ${setFile} failed prematurely.\nCheck your log file: ${logFile}!" >> ${scriptLog}
+       echo -e "Simulation using ${runFile} and ${setFile} failed prematurely.\nCheck your log file: ${logFile}!" | mail -s "${SIMID}_${IJOB}-${RSTcount} failed" ${USER_EMAIL}
+       exit
+    fi
     # get job ID, start time and remaining job time
     gotInfo=0
     while [ ${gotInfo} -eq 0 ]; do
@@ -361,7 +367,7 @@ while [ ${IJOB} -le ${NJOBS} ]; do
         leftTimeStr=`echo "${squeueOut}" | cut -d ',' -f 2`
         startTimeStr=`echo "${squeueOut}" | cut -d ',' -f 3`
       else
-        sleep 60
+        sleep 300
       fi
     done
     isDays="$(echo "${leftTimeStr}" | grep - | wc -l)"
@@ -386,8 +392,8 @@ while [ ${IJOB} -le ${NJOBS} ]; do
         running=0
         echo -e "Job ${slurmJobID} ended:   `date`" >> ${scriptLog}
       else
-        sleep 60
-        let runTime=runTime-60
+        sleep 300
+        let runTime=runTime-300
       fi
     done
     # job complete: copy files to wrk directory
