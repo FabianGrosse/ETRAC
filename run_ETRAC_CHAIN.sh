@@ -375,7 +375,7 @@ while [ ${IJOB} -le ${NJOBS} ]; do
     if [ -e jobEnd ]; then
        cp -f etrac_logfile.dat ${wrkPath}${logFile}
        echo -e "ETRAC calculation using ${runFile} and ${setFile} failed prematurely.\nCheck your log file: ${logFile}!" >> ${scriptLog}
-       echo -e "Simulation using ${runFile} and ${setFile} failed prematurely.\nCheck your log file: ${logFile}!" | mail -s "${SIMID}_${IJOB}-${RSTcount} failed" ${USER_EMAIL}
+       echo -e "Simulation using ${runFile} and ${setFile} failed prematurely.\nCheck your log file: ${logFile}!" | mail -s "${runID}_${IJOB}-${RSTcount} failed" ${USER_EMAIL}
        exit
     fi
     # get job ID, start time and remaining job time
