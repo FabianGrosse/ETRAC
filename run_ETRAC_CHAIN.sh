@@ -22,7 +22,7 @@
 # =====================================================================
 
 # debug this script? yes (1) or no (0 = default)?
-# - debug=1: script log is prompted to terminal
+# - debug=1: only tests this script; script log is prompted to terminal, no job is sumbitted
 # - debug=0: script log is written to log file
 debug=0
 
@@ -30,32 +30,49 @@ debug=0
 #runID=roms854-NGoMex-TBNT
 runID=roms854-test
 
-# define if job is a new job, i.e., starting from initialisation: yes (1) or no (0)?
-newJob=1
-
-# submit job or only prepare setup? (only useful if single job)
-submitJob=0
-
 # set directories and names of input, output and temporary files
 # NOTE: directories require '/' at end of name
 #       initPath and outputPath must match in case of a series of jobs
+#
+# path and file name of merged yearly ROMS output files
+# for running multiple years, use YEAR_TMP placeholder in file name
 bulkPath=/scratch/grosse/roms854_TBNT-N_NGoMex_PERFECT_RST/
 bulkDummy=tbnt_mch_bio_tbnt_YEAR_TMP.nc
+# path and file name of initialization files (i.e. distributions of relative tracer fractions)
+# for running multiple years, use INIYEAR_TMP placeholder in file name
 initPath=/scratch/grosse/TBNT_${runID}/
 initDummy=${runID}_INIYEAR_TMP_relative_fractions.nc
+# output path
 outputPath=/scratch/grosse/TBNT_${runID}/
+# temporary path used only during the job
 tmpPath=/scratch/grosse/TBNT_${runID}_TMP/
 
-# directories with model and ETRAC setup files
-# NOTE: no '/' at end of names
-modelPath=/home/grosse/ETRAC/setup_files/model_setup
-etracPath=/home/grosse/ETRAC/setup_files/etrac_setup
+# project and work paths
+#  - the project path contains all scripts (incl. this very one), template files, the 'Build' folder
+#    with the compiled executable and the folders 'model_setup' and 'etrac_setup'
+#  - this script needs to be executed from the project directory
+#  - copies of the jobs' run files and the log file are stored in the work path
+projPath=`pwd`
+wrkPath=${projPath}/wrk
 
-# set template file used for TBNT setup
+# directories with model and tracing setup files used by ETRAC
+# NOTE: directories require '/' at end of name
+modelPath=/home/grosse/ETRAC/setup_files/model_setup/
+etracPath=/home/grosse/ETRAC/setup_files/etrac_setup/
+
+# set template file used for ETRAC setup
 setBase=etrac_set_BASE.nml
 
-# define filename for log file => must be identical to the name defined in tbnt_common.F90
+# define file name for log file => must be identical to the name defined in ETRAC/software/src/etrac_common.F90
 logFile=etrac_logfile.dat
+
+# define if job is a new job, i.e., starting from initialization (0) or not (1)
+# set to 1 if you start an entirely new job, set to 0 if you have an initialization file available
+# or if you have to manually continue a failed job
+newJob=0
+
+# submit job or only prepare setup? (only useful if single job)
+submitJob=1
 
 # keep log files of individual jobs? yes (1) or no (0)
 keepLog=1
@@ -64,29 +81,32 @@ keepLog=1
 keepRunFiles=0
 
 # define time step and sub-time step (in minutes), and time step index for first step of first job
-# set 'FINAL_STEP=0' to run until end of each year
+#  - as ETRAC applies an automatic recursive time step subdivision (if needed), SUB_STEP should be
+#    identical to TIME_STEP; if you want to apply a fixed smaller sub step, SUB_STEP must be a proper
+#    divider of TIME_STEP (note that automatic time step subdivision may still occur)
+#  - set 'FINAL_STEP=0' to run until end of each year
 TIME_STEP=1440
 SUB_STEP=1440
 FIRST_STEP=50
 FINAL_STEP=51
 
-# if 1st year's calculation is not started on very first time step, define offset
-# (i.e., actual starting day) to ensure correct reading of warmstart bulk variables
+# if 1st year's calculation is not started on very first time step, define time step offset
+# (i.e., actual starting day) to ensure correct reading of bulk variables
 OFFSET_STEP=49
 
-# if timeMode==1: provide start and end year
-FIRSTYEAR=2000
-LASTYEAR=2000
+# provide start and end year
+FIRSTYEAR=2001
+LASTYEAR=2001
 
 # define SLURM job settings
-# (account name, memory per CPU, job name, ntasks, email of usera)
+# (account name, memory per CPU, job name, ntasks, email of user)
 JOB_ACC='def-kfennel'
 MEM_CPU='7000M'
 JOB_NAME=ETRAC_${runID}_CHAIN
 NTASKS=1
 USER_EMAIL='fabian.grosse@dal.ca'
 # time limit: days, hours, minutes and seconds; individual 2-digit strings
-JOB_DD='00' # days
+JOB_DD='02' # days
 JOB_HH='23' # hours
 JOB_MM='59' # minutes
 JOB_SS='55' # seconds
@@ -130,6 +150,9 @@ fi
 # create output directory
 mkdir -p ${outputPath}
 
+# create work directory
+mkdir -p ${wrkPath}
+
 # start logging 
 rm -f ${scriptLog}
 head="=======================\n CHAIN JOB INFORMATION\n======================="
@@ -167,9 +190,7 @@ awk '{gsub("JOBACC_TMP", "'${JOB_ACC}'"); \
       print}' ETRAC_SINGLE_BASE.slurm > ETRAC_${runID}_BASE.slurm
 
 
-# loop over jobs: placeholders in ocean.in base file are updated and jobs are submitted successively
-projPath=`pwd`
-wrkPath=${projPath}/wrk
+# loop over jobs: placeholders in template files are updated and jobs are submitted successively
 IJOB=1
 jobOK=1
 RSTcount=0
@@ -329,17 +350,14 @@ while [ ${IJOB} -le ${NJOBS} ]; do
     cp -f $projPath/${setFile} .
     ln -s ${setFile} etrac_set.nml
     cp -f $projPath/Build/ETRAC .
-    cp -rf $modelPath .
-    cp -rf $etracPath .
+    cp -rf $projPath/$modelPath .
+    cp -rf $projPath/$etracPath .
     cp -f $projPath/${scriptLog} .
-    # submit job and get slurm job ID
-    # job is submitted first, job ID is determined afterwards
-    # This is necessary to avoid problems related to slurm issues
-    #let slurmJobID="$(sbatch ${runFile} | cut -d ' ' -f 4)"
+    # submit job
     if [ ${submitJob} -eq 1 ]; then
       sbatch ${runFile}
     else
-      echo "Setup files created and copied to: "${tmpPath}"."
+      echo "Run files created and copied to: "${tmpPath}". Ready for manual submission."
       exit
     fi
     # sleep until job has started (i.e., until "jobStart" file exists)
@@ -353,6 +371,7 @@ while [ ${IJOB} -le ${NJOBS} ]; do
     done
     # check for early job error
     if [ -e jobEnd ]; then
+       cp -f etrac_logfile.dat ${wrkPath}${logFile}
        echo -e "ETRAC calculation using ${runFile} and ${setFile} failed prematurely.\nCheck your log file: ${logFile}!" >> ${scriptLog}
        echo -e "Simulation using ${runFile} and ${setFile} failed prematurely.\nCheck your log file: ${logFile}!" | mail -s "${SIMID}_${IJOB}-${RSTcount} failed" ${USER_EMAIL}
        exit
