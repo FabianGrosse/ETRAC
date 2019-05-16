@@ -55,7 +55,7 @@ tbntPath=/home/grosse/ETRAC/setup_files/etrac_setup
 setBase=etrac_set_BASE.nml
 
 # define filename for log file => must be identical to the name defined in tbnt_common.F90
-logFile=tbnt_logfile.dat
+logFile=etrac_logfile.dat
 
 # keep log files of individual jobs? yes (1) or no (0)
 keepLog=1
