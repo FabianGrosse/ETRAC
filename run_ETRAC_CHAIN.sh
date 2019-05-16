@@ -59,8 +59,8 @@ wrkPath=${projPath}/wrk
 
 # directories with model and tracing setup files used by ETRAC
 # NOTE: directories require '/' at end of name
-modelPath=/home/grosse/ETRAC/setup_files/model_setup/
-etracPath=/home/grosse/ETRAC/setup_files/etrac_setup/
+modelPath=${projPath}/setup_files/model_setup/
+etracPath=${projPath}/setup_files/etrac_setup/
 
 # set template file used for ETRAC setup
 setBase=etrac_set_BASE.nml
@@ -111,7 +111,7 @@ USER_EMAIL='DUMMY.USER@EMAIL.COM'
 JOB_DD='02' # days
 JOB_HH='23' # hours
 JOB_MM='59' # minutes
-JOB_SS='55' # seconds
+JOB_SS='00' # seconds
 
 # ===================================================================
 # END OF USER-DEFINED SET-UP
@@ -352,8 +352,8 @@ while [ ${IJOB} -le ${NJOBS} ]; do
     cp -f $projPath/${setFile} .
     ln -s ${setFile} etrac_set.nml
     cp -f $projPath/Build/ETRAC .
-    cp -rf $projPath/$modelPath .
-    cp -rf $projPath/$etracPath .
+    cp -rf $modelPath .
+    cp -rf $etracPath .
     cp -f $projPath/${scriptLog} .
     # submit job
     if [ ${submitJob} -eq 1 ]; then
