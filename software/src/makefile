@@ -39,7 +39,7 @@ $(info =========================================================)
 #------------------------------------------------------------------------
    DEFINES   += -DTBNTconvert_3Dto1D#        # convert 3D input data to 1D vector used for ETRAC calculation => this is currently mandatory
    DEFINES   += -DTBNTmass_fluxes#           # fluxes in input file are mass fluxes, otherwise fluxes are vertically integrated (i.e., concentration change multiplied with grid cell thickness)
-#   DEFINES   += -DTBNTnoVar2D#               # enable if model contains no 2D variables (incl. variables that are open ends of model fluxes, e.g. dinitrogen)
+   DEFINES   += -DTBNTnoVar2D#               # enable if model contains no 2D variables (incl. variables that are open ends of model fluxes, e.g. dinitrogen)
 #   DEFINES   += -DTBNTswitchNS#              # do NOT use, this requires further development and testing; intended use: enable if indexing in y-direction in grid information files is opposite to indexing in NetCDF files (S-N)
 #   DEFINES   += -DTBNTonline_budget_check#   # check bulk variable budget for domain-wide variables masses after each day => this will increase run time due to additional I/O
 #   DEFINES   += -DTBNTonly_bulk_bud#         # only calculate balance for selected BULK variable for a selected grid cell (see etrac_set.nml) => no ETRAC calculation; useful for testing model output for ETRAC suitability
