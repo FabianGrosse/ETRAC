@@ -16,7 +16,7 @@
 # 1) define set-up in script header
 # 2) execute script by: nohup ./run_ETRAC_CHAIN.sh &
 # =====================================================================
-# last changed: November 30th, 2017
+# last changed: May 16th, 2019
 # =====================================================================
 # USER-DEFINED SET-UP
 # =====================================================================
