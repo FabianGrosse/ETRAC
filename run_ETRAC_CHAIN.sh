@@ -89,12 +89,13 @@ keepRunFiles=0
 #  - set 'FINAL_STEP=0' to run until end of each year
 TIME_STEP=1440
 SUB_STEP=1440
-FIRST_STEP=50
-FINAL_STEP=51
+# define first and last step (in unit of TIME_STEP) to be calculated
+FIRST_STEP=1
+FINAL_STEP=10
 
-# if 1st year's calculation is not started on very first time step, define time step offset
-# (i.e., actual starting day) to ensure correct reading of bulk variables
-OFFSET_STEP=49
+# if 1st year's calculation is not started on very first time step (i.e. FIRST_STEP>1), define time step offset
+# (= FIRST_STEP - 1) to ensure correct reading of bulk variables
+OFFSET_STEP=0
 
 # provide start and end year
 FIRSTYEAR=2001
