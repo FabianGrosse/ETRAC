@@ -97,7 +97,7 @@ FIRST_STEP=1
 FINAL_STEP=10
 
 # if 1st year's calculation is not started on very first time step (i.e. FIRST_STEP>1), define time step offset
-# (= FIRST_STEP - 1) to ensure correct reading of bulk variables
+# (= FIRST_STEP - 1), i.e. days to be skipped, to ensure correct reading of bulk variables
 OFFSET_STEP=0
 
 # provide start and end year
